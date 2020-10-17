@@ -31,20 +31,27 @@ public class Main extends JFrame {
 
         buttonPanel = new JPanel();
 
-        JButton BrightnessUp = new JButton("Brightness +");
-        BrightnessUp.addActionListener(e -> {
+        JButton brightnessUp = new JButton("Brightness +");
+        brightnessUp.addActionListener(e -> {
             utils.imageBrightness(10);
             canvasPanel.repaint();
         });
 
-        JButton BrightnessDown = new JButton("Brightness -");
-        BrightnessDown.addActionListener(e -> {
+        JButton brightnessDown = new JButton("Brightness -");
+        brightnessDown.addActionListener(e -> {
             utils.imageBrightness(-10);
             canvasPanel.repaint();
         });
 
-        buttonPanel.add(BrightnessUp);
-        buttonPanel.add(BrightnessDown);
+        JButton blackAndWhite = new JButton("B & W");
+        blackAndWhite.addActionListener(e -> {
+            utils.blackAndWhite(175);
+            canvasPanel.repaint();
+        });
+
+        buttonPanel.add(brightnessUp);
+        buttonPanel.add(brightnessDown);
+        buttonPanel.add(blackAndWhite);
 
         buttonPanel.setLayout(new GridLayout(7, 2));
 

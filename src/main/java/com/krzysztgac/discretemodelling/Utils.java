@@ -33,12 +33,42 @@ public class Utils {
                 int RGB = new Color(R, G, B).getRGB();
 
                 dm.bgImg.setRGB(i, j, RGB);
-
             }
         }
-
     }
 
+    void blackAndWhite(int value) {
+
+        int width = dm.bgImg.getWidth();
+        int height = dm.bgImg.getHeight();
+
+        for (int i = 0; i < width; i++){
+            for (int j = 0; j < height; j++){
+
+                Color readColor = new Color(dm.bgImg.getRGB(i, j));
+                int R = readColor.getRed();
+                int G = readColor.getGreen();
+                int B = readColor.getBlue();
+
+                if (R >= value)
+                    R = 255;
+                else
+                    R = 0;
+                if (G >= value)
+                    G = 255;
+                else
+                    G = 0;
+                if (B >= value)
+                    B = 255;
+                else
+                    B = 0;
+
+                int RGB = new Color(R, G, B).getRGB();
+
+                dm.bgImg.setRGB(i, j, RGB);
+            }
+        }
+    }
 
 
 }
