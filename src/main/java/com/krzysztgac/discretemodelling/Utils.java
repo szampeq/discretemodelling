@@ -10,7 +10,7 @@ public class Utils {
         this.dm = dm;
     }
 
-    void darkImage() {
+    void imageBrightness(int value) {
 
         int width = dm.bgImg.getWidth();
         int height = dm.bgImg.getHeight();
@@ -23,12 +23,12 @@ public class Utils {
                 int G = readColor.getGreen();
                 int B = readColor.getBlue();
 
-                if (R >= 10)
-                    R -= 10;
-                if (G >= 10)
-                    G -= 10;
-                if (B >= 10)
-                    B -= 10;
+                if (R + value >=0 && R + value <= 255)
+                    R += value;
+                if (G + value >=0 && G + value <= 255)
+                    G += value;
+                if (B + value >=0 && B + value <= 255)
+                    B += value;
 
                 int RGB = new Color(R, G, B).getRGB();
 
