@@ -13,7 +13,7 @@ public class Main extends JFrame {
     static DataManager dm;
     private JPanel mainPanel;
     private JPanel buttonPanel;
-    private JCanvasPanel canvasPanel;
+    private static JCanvasPanel canvasPanel;
     Utils utils;
 
     public Main(String title){
@@ -31,29 +31,24 @@ public class Main extends JFrame {
 
         buttonPanel = new JPanel();
 
-        JButton refreshImage = new JButton("Load/Refresh Image");
+        JButton refreshImage = newButton("Refresh Image");
         refreshImage.addActionListener(e -> {
-            try {
-                dm.bgImg = ImageIO.read(new File("src/main/resources/Mapa_MD_no_terrain_low_res_dark_Gray.bmp"));
-            } catch (IOException f) {
-                f.printStackTrace();
-            }
-            canvasPanel.repaint();
+            loadImage();
         });
 
-        JButton brightnessUp = new JButton("Brightness +");
+        JButton brightnessUp = newButton("Brightness +");
         brightnessUp.addActionListener(e -> {
             utils.imageBrightness(10);
             canvasPanel.repaint();
         });
 
-        JButton brightnessDown = new JButton("Brightness -");
+        JButton brightnessDown = newButton("Brightness -");
         brightnessDown.addActionListener(e -> {
             utils.imageBrightness(-10);
             canvasPanel.repaint();
         });
 
-        JButton blackAndWhite = new JButton("B & W");
+        JButton blackAndWhite = newButton("B & W");
         blackAndWhite.addActionListener(e -> {
             utils.blackAndWhite(175);
             canvasPanel.repaint();
@@ -64,18 +59,21 @@ public class Main extends JFrame {
         buttonPanel.add(brightnessDown);
         buttonPanel.add(blackAndWhite);
 
-        buttonPanel.setLayout(new GridLayout(7, 2));
+        buttonPanel.setLayout(new GridLayout(4, 1));
 
         // =========== MAIN PANEL ==========
         mainPanel.add(BorderLayout.CENTER, canvasPanel);
         mainPanel.add(BorderLayout.EAST, buttonPanel);
+        canvasPanel.setBackground(Color.DARK_GRAY);
+        buttonPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        buttonPanel.setBackground(Color.DARK_GRAY);
 
         utils = new Utils(dm);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
 
-        this.setSize(new Dimension(900, 600));
+        this.setSize(new Dimension(760, 370));
         this.setLocationRelativeTo(null);
 
         canvasPanel.repaint();
@@ -85,9 +83,26 @@ public class Main extends JFrame {
 
         Main mw = new Main("Discrete Modelling");
         mw.setVisible(true);
+        loadImage();
+        canvasPanel.repaint();
 
-        Utils utils = new Utils(dm);
-        mw.canvasPanel.repaint();
+    }
 
+    static void loadImage(){
+        try {
+            dm.bgImg = ImageIO.read(new File("src/main/resources/Mapa_MD_no_terrain_low_res_dark_Gray.bmp"));
+        } catch (IOException f) {
+            f.printStackTrace();
+        }
+        canvasPanel.repaint();
+    }
+
+    JButton newButton(String text){
+        JButton button = new JButton(text);
+        button.setBackground(Color.WHITE);
+        button.setForeground(Color.DARK_GRAY);
+        button.setFont(new Font("Tahoma",Font.BOLD,14));
+        buttonPanel.add(button);
+        return button;
     }
 }
