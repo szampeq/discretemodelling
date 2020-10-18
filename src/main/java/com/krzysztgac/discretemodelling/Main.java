@@ -31,6 +31,16 @@ public class Main extends JFrame {
 
         buttonPanel = new JPanel();
 
+        JButton refreshImage = new JButton("Load/Refresh Image");
+        refreshImage.addActionListener(e -> {
+            try {
+                dm.bgImg = ImageIO.read(new File("src/main/resources/Mapa_MD_no_terrain_low_res_dark_Gray.bmp"));
+            } catch (IOException f) {
+                f.printStackTrace();
+            }
+            canvasPanel.repaint();
+        });
+
         JButton brightnessUp = new JButton("Brightness +");
         brightnessUp.addActionListener(e -> {
             utils.imageBrightness(10);
@@ -49,6 +59,7 @@ public class Main extends JFrame {
             canvasPanel.repaint();
         });
 
+        buttonPanel.add(refreshImage);
         buttonPanel.add(brightnessUp);
         buttonPanel.add(brightnessDown);
         buttonPanel.add(blackAndWhite);
@@ -60,16 +71,6 @@ public class Main extends JFrame {
         mainPanel.add(BorderLayout.EAST, buttonPanel);
 
         utils = new Utils(dm);
-
-        // ========== IMAGE READER ==========
-
-        try {
-            dm.bgImg = ImageIO.read(new File("src/main/resources/Mapa_MD_no_terrain_low_res_dark_Gray.bmp"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // ===================================
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
