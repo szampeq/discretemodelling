@@ -37,7 +37,7 @@ public class Utils {
         }
     }
 
-    void blackAndWhite(int value) {
+    void binarization(int value) {
 
         int width = dm.bgImg.getWidth();
         int height = dm.bgImg.getHeight();
@@ -70,5 +70,25 @@ public class Utils {
         }
     }
 
+    void reverse() {
+
+        int width = dm.bgImg.getWidth();
+        int height = dm.bgImg.getHeight();
+
+        for (int i = 0; i < width; i++){
+            for (int j = 0; j < height; j++){
+
+                Color readColor = new Color(dm.bgImg.getRGB(i, j));
+                int R = 255 - readColor.getRed();
+                int G = 255 - readColor.getGreen();
+                int B = 255 - readColor.getBlue();
+
+
+                int RGB = new Color(R, G, B).getRGB();
+
+                dm.bgImg.setRGB(i, j, RGB);
+            }
+        }
+    }
 
 }

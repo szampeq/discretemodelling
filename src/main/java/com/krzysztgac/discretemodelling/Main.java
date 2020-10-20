@@ -48,25 +48,46 @@ public class Main extends JFrame {
             canvasPanel.repaint();
         });
 
-        JButton blackAndWhite = newButton("B & W");
-        blackAndWhite.addActionListener(e -> {
-            utils.blackAndWhite(175);
+        // ============== BINARIZATION ===============
+
+        JLabel binarizationLabel = new JLabel("Binarization treshodl:");
+        Integer[] rgb = new Integer[256];
+        for (int i = 0; i < 256; i++){
+            rgb[i] = i;
+        }
+        JComboBox<Integer> binarizationValue = new JComboBox<>(rgb);
+
+        JButton binarization = newButton("Binarization");
+        binarization.addActionListener(e -> {
+            Integer selectedValue = (Integer) binarizationValue.getSelectedItem();
+            if (selectedValue != null) {
+                utils.binarization(selectedValue);
+                canvasPanel.repaint();
+            }
+        });
+
+        JButton reverse = newButton("Reverse");
+        reverse.addActionListener(e -> {
+            utils.reverse();
             canvasPanel.repaint();
         });
 
         buttonPanel.add(refreshImage);
         buttonPanel.add(brightnessUp);
         buttonPanel.add(brightnessDown);
-        buttonPanel.add(blackAndWhite);
+        buttonPanel.add(binarizationLabel);
+        buttonPanel.add(binarizationValue);
+        buttonPanel.add(binarization);
+        buttonPanel.add(reverse);
 
-        buttonPanel.setLayout(new GridLayout(4, 1));
+        buttonPanel.setLayout(new GridLayout(7, 1));
 
         // =========== MAIN PANEL ==========
         mainPanel.add(BorderLayout.CENTER, canvasPanel);
         mainPanel.add(BorderLayout.EAST, buttonPanel);
         canvasPanel.setBackground(Color.DARK_GRAY);
         buttonPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-        buttonPanel.setBackground(Color.DARK_GRAY);
+        buttonPanel.setBackground(Color.WHITE);
 
         utils = new Utils(dm);
 
