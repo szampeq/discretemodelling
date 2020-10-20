@@ -66,6 +66,19 @@ public class Main extends JFrame {
             }
         });
 
+        // FILTERS
+
+        String[] filters = {"LowPass", "HighPass", "Gauss"};
+        JLabel filterLabel = new JLabel("Select filter:");
+        JComboBox<String> selectFilter = new JComboBox<>(filters);
+
+        JButton filter = newButton("Filter");
+        filter.addActionListener(e -> {
+            String selectedFilter =  (String) selectFilter.getSelectedItem();
+            utils.putFilterOn(selectedFilter);
+            canvasPanel.repaint();
+        });
+
         JButton reverse = newButton("Reverse");
         reverse.addActionListener(e -> {
             utils.reverse();
@@ -78,9 +91,12 @@ public class Main extends JFrame {
         buttonPanel.add(binarizationLabel);
         buttonPanel.add(binarizationValue);
         buttonPanel.add(binarization);
+        buttonPanel.add(filterLabel);
+        buttonPanel.add(selectFilter);
+        buttonPanel.add(filter);
         buttonPanel.add(reverse);
 
-        buttonPanel.setLayout(new GridLayout(7, 1));
+        buttonPanel.setLayout(new GridLayout(10, 1));
 
         // =========== MAIN PANEL ==========
         mainPanel.add(BorderLayout.CENTER, canvasPanel);
