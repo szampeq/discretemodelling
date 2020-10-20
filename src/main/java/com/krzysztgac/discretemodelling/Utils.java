@@ -102,8 +102,6 @@ public class Utils {
                 image[w][h] = dm.bgImg.getRGB(w, h);
             }
 
-        int[][] newImage = new int[width][height];
-
         int[][] lowpassFilter = {{1, 1, 1},
                                  {1, 1, 1},
                                  {1, 1, 1}};
@@ -116,14 +114,14 @@ public class Utils {
                                {-1, 9, -1},
                                {-1, -1, -1}};
 
-        int[][] Filter;
+        int[][] filter;
 
         if (mask.equals("LowPass"))
-            Filter = lowpassFilter;
+            filter = lowpassFilter;
         else if(mask.equals("HighPass"))
-            Filter = highpassFilter;
+            filter = highpassFilter;
         else
-            Filter = gaussFilter;
+            filter = gaussFilter;
 
 
         for (int i = 0; i < image.length; i++){
@@ -131,8 +129,8 @@ public class Utils {
 
                 int v = 0;
 
-                for (int m = 0; m < 3; m++)
-                    for (int n = 0; n < 3; n++){
+                for (int m = 0; m < filter.length; m++)
+                    for (int n = 0; n < filter[0].length; n++){
                         int x = i + m;
                         int y = j + n;
 
@@ -140,24 +138,16 @@ public class Utils {
 						if (x > image.length - 1) continue;
 						if (y > image[i].length - 1) continue;
 
-                        x = Math.max(x, 0);
                         x = Math.min(x, image.length - 1);
-                        y = Math.max(y, 0);
                         y = Math.min(y, image[i].length - 1);
 
-                        v += (image[x][y]) * (Filter[n][m]);
+                        v += (image[x][y]) * (filter[n][m]);
 
                     }
 
-                    newImage[i][j] = v;
+                    dm.bgImg.setRGB(i, j, v);
             }
         }
-
-        for (int w = 0; w < image.length; w++)
-            for (int h = 0; h < image[0].length; h++) {
-                dm.bgImg.setRGB(w, h, newImage[w][h]);
-            }
-
     }
 
 
