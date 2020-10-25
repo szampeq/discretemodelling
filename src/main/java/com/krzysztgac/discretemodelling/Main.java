@@ -2,6 +2,7 @@ package com.krzysztgac.discretemodelling;
 
 import com.krzysztgac.discretemodelling.data.DataManager;
 import com.krzysztgac.discretemodelling.data.JCanvasPanel;
+import com.krzysztgac.discretemodelling.tools.SimpleTools;
 import com.krzysztgac.discretemodelling.tools.Utils;
 
 import javax.imageio.ImageIO;
@@ -10,11 +11,12 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+import static com.krzysztgac.discretemodelling.tools.SimpleTools.loadImage;
+
 public class Main extends JFrame {
 
     static DataManager dm;
-    private JPanel mainPanel;
-    private JPanel buttonPanel;
+    private final JPanel buttonPanel;
     private static JCanvasPanel canvasPanel;
     static Utils utils;
 
@@ -26,26 +28,24 @@ public class Main extends JFrame {
         dm = new DataManager();
         canvasPanel = new JCanvasPanel(dm);
 
-        mainPanel = new JPanel();
+        JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
         // ============ BUTTONS ============
 
         buttonPanel = new JPanel();
 
-        JButton refreshImage = newButton("Refresh Image");
-        refreshImage.addActionListener(e -> {
-            loadImage();
-        });
+        Button refreshImage = new Button("Refresh Image", buttonPanel);
+        refreshImage.button.addActionListener(e -> loadImage(dm, canvasPanel));
 
-        JButton brightnessUp = newButton("Brightness +");
-        brightnessUp.addActionListener(e -> {
+        Button brightnessUp = new Button("Brightness +", buttonPanel);
+        brightnessUp.button.addActionListener(e -> {
             utils.imageBrightness(10);
             canvasPanel.repaint();
         });
 
-        JButton brightnessDown = newButton("Brightness -");
-        brightnessDown.addActionListener(e -> {
+        Button brightnessDown = new Button("Brightness -", buttonPanel);
+        brightnessDown.button.addActionListener(e -> {
             utils.imageBrightness(-10);
             canvasPanel.repaint();
         });
@@ -60,8 +60,11 @@ public class Main extends JFrame {
         JComboBox<Integer> binarizationValue = new JComboBox<>(rgb);
         binarizationValue.setSelectedItem(rgb[180]);
 
-        JButton binarization = newButton("Binarization");
-        binarization.addActionListener(e -> {
+        buttonPanel.add(binarizationLabel);
+        buttonPanel.add(binarizationValue);
+
+        Button binarization = new Button("Binarization", buttonPanel);
+        binarization.button.addActionListener(e -> {
             Integer selectedValue = (Integer) binarizationValue.getSelectedItem();
             if (selectedValue != null) {
                 utils.binarization(selectedValue);
@@ -75,58 +78,47 @@ public class Main extends JFrame {
         JLabel filterLabel = new JLabel("Select filter:");
         JComboBox<String> selectFilter = new JComboBox<>(filters);
 
-        JButton filter = newButton("Filter");
-        filter.addActionListener(e -> {
+        buttonPanel.add(filterLabel);
+        buttonPanel.add(selectFilter);
+
+        Button filter = new Button("Filter", buttonPanel);
+        filter.button.addActionListener(e -> {
             String selectedFilter =  (String) selectFilter.getSelectedItem();
+            assert selectedFilter != null;
             utils.putFilterOn(selectedFilter);
             canvasPanel.repaint();
         });
 
-        JButton erosion = newButton("Erosion");
-        erosion.addActionListener(e -> {
+        Button erosion = new Button("Erosion", buttonPanel);
+        erosion.button.addActionListener(e -> {
             utils.erosionDilatation("Erosion");
             canvasPanel.repaint();
         });
 
-        JButton dilatation = newButton("Dilatation");
-        dilatation.addActionListener(e -> {
+        Button dilatation = new Button("Dilatation", buttonPanel);
+        dilatation.button.addActionListener(e -> {
             utils.erosionDilatation("Dilatation");
             canvasPanel.repaint();
         });
 
-        JButton morphOpening = newButton("Morph. Opening");
-        morphOpening.addActionListener(e -> {
+        Button morphOpening = new Button("Morph. Opening", buttonPanel);
+        morphOpening.button.addActionListener(e -> {
             utils.morphologicalOpening();
             canvasPanel.repaint();
         });
 
-        JButton morphClosure = newButton("Morph. Closure");
-        morphClosure.addActionListener(e -> {
+        Button morphClosure = new Button("Morph. Closure", buttonPanel);
+        morphClosure.button.addActionListener(e -> {
             utils.morphologicalClosure();
             canvasPanel.repaint();
         });
 
-        JButton reverse = newButton("Reverse");
-        reverse.addActionListener(e -> {
+        Button reverse = new Button("Reverse", buttonPanel);
+        reverse.button.addActionListener(e -> {
             utils.reverse();
             canvasPanel.repaint();
         });
 
-
-        buttonPanel.add(refreshImage);
-        buttonPanel.add(brightnessUp);
-        buttonPanel.add(brightnessDown);
-        buttonPanel.add(binarizationLabel);
-        buttonPanel.add(binarizationValue);
-        buttonPanel.add(binarization);
-        buttonPanel.add(filterLabel);
-        buttonPanel.add(selectFilter);
-        buttonPanel.add(filter);
-        buttonPanel.add(erosion);
-        buttonPanel.add(dilatation);
-        buttonPanel.add(morphOpening);
-        buttonPanel.add(morphClosure);
-        buttonPanel.add(reverse);
 
         buttonPanel.setLayout(new GridLayout(14, 1));
 
@@ -150,27 +142,11 @@ public class Main extends JFrame {
 
         Main mw = new Main("Discrete Modelling");
         mw.setVisible(true);
-        loadImage();
+        loadImage(dm, canvasPanel);
         utils = new Utils(dm);
         canvasPanel.repaint();
 
     }
 
-    static void loadImage(){
-        try {
-            dm.bgImg = ImageIO.read(new File("src/main/resources/Mapa_MD_no_terrain_low_res_dark_Gray.bmp"));
-        } catch (IOException f) {
-            f.printStackTrace();
-        }
-        canvasPanel.repaint();
-    }
 
-    JButton newButton(String text){
-        JButton button = new JButton(text);
-        button.setBackground(Color.WHITE);
-        button.setForeground(Color.DARK_GRAY);
-        button.setFont(new Font("Tahoma",Font.BOLD,14));
-        buttonPanel.add(button);
-        return button;
-    }
 }

@@ -169,8 +169,10 @@ public class Utils {
                         if (i > width - 1) continue;
                         if (j > height - 1) continue;
 
-                        if (image[i][j] == flagValue)
+                        if (image[i][j] == flagValue) {
                             flag = true;
+                            break;
+                        }
                     }
                 if (flag) {
                     int RGB = new Color(flagValue, flagValue, flagValue).getRGB();
