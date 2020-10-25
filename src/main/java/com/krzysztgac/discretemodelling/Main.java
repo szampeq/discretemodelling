@@ -14,7 +14,7 @@ public class Main extends JFrame {
     private JPanel mainPanel;
     private JPanel buttonPanel;
     private static JCanvasPanel canvasPanel;
-    Utils utils;
+    static Utils utils;
 
     public Main(String title){
         super(title);
@@ -79,11 +79,24 @@ public class Main extends JFrame {
             canvasPanel.repaint();
         });
 
+        JButton erosion = newButton("Erosion");
+        erosion.addActionListener(e -> {
+            utils.erosionDilatation("Erosion");
+            canvasPanel.repaint();
+        });
+
+        JButton dilatation = newButton("Dilatation");
+        dilatation.addActionListener(e -> {
+            utils.erosionDilatation("Dilatation");
+            canvasPanel.repaint();
+        });
+
         JButton reverse = newButton("Reverse");
         reverse.addActionListener(e -> {
             utils.reverse();
             canvasPanel.repaint();
         });
+
 
         buttonPanel.add(refreshImage);
         buttonPanel.add(brightnessUp);
@@ -94,9 +107,11 @@ public class Main extends JFrame {
         buttonPanel.add(filterLabel);
         buttonPanel.add(selectFilter);
         buttonPanel.add(filter);
+        buttonPanel.add(erosion);
+        buttonPanel.add(dilatation);
         buttonPanel.add(reverse);
 
-        buttonPanel.setLayout(new GridLayout(10, 1));
+        buttonPanel.setLayout(new GridLayout(12, 1));
 
         // =========== MAIN PANEL ==========
         mainPanel.add(BorderLayout.CENTER, canvasPanel);
@@ -104,8 +119,6 @@ public class Main extends JFrame {
         canvasPanel.setBackground(Color.DARK_GRAY);
         buttonPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         buttonPanel.setBackground(Color.WHITE);
-
-        utils = new Utils(dm);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
@@ -121,6 +134,7 @@ public class Main extends JFrame {
         Main mw = new Main("Discrete Modelling");
         mw.setVisible(true);
         loadImage();
+        utils = new Utils(dm);
         canvasPanel.repaint();
 
     }

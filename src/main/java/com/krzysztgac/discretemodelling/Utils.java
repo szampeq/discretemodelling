@@ -6,15 +6,16 @@ import java.awt.*;
 public class Utils {
 
     DataManager dm;
+    int width;
+    int height;
 
     public Utils(DataManager dm){
         this.dm = dm;
+        this.width = dm.bgImg.getWidth();
+        this.height = dm.bgImg.getHeight();
     }
 
     void imageBrightness(int value) {
-
-        int width = dm.bgImg.getWidth();
-        int height = dm.bgImg.getHeight();
 
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
@@ -33,9 +34,6 @@ public class Utils {
     }
 
     void binarization(int value) {
-
-        int width = dm.bgImg.getWidth();
-        int height = dm.bgImg.getHeight();
 
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
@@ -58,9 +56,6 @@ public class Utils {
 
     void reverse() {
 
-        int width = dm.bgImg.getWidth();
-        int height = dm.bgImg.getHeight();
-
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
 
@@ -77,18 +72,20 @@ public class Utils {
         }
     }
 
+    // CONVOLUTION (LowPass Filter, HighPass Filter and Gauss Filter)
+
     void putFilterOn(String mask){
-        int width = dm.bgImg.getWidth();
-        int height = dm.bgImg.getHeight();
 
         double[][] image = new double[width][height];
-
+/*
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++) {
                 Color readColor = new Color(dm.bgImg.getRGB(x, y));
                 int R = readColor.getRed();
                 image[x][y] = R;
             }
+*/
+        fillArrayRedColor(image);
 
         double[][] lowpassFilter = {
                     {1.0/9.0, 1.0/9.0, 1.0/9.0},
@@ -119,10 +116,10 @@ public class Utils {
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
 
-                int v = 0;
+                int v = 0; // new RGB value
 
-                for (int m = 0; m < filter.length; m++)
-                    for (int n = 0; n < filter[0].length; n++){
+                for (int m = 0; m < filter.length; m++) // Mask Columns
+                    for (int n = 0; n < filter[0].length; n++){ // Mask Rows
 
                         int i = x - filter.length/2 + m;
                         int j = y - filter[0].length/2 + n;
@@ -145,4 +142,71 @@ public class Utils {
     }
 
 
+    void erosionDilatation(String function) {
+
+        double[][] image = new double[width][height];
+        fillArrayRedColor(image);
+
+        double minRGB = findArrayMin(image);
+        double maxRGB = findArrayMax(image);
+        int flagValue;
+
+        if (function.equals("Dilatation"))
+            flagValue = (int)minRGB;
+        else
+            flagValue = (int)maxRGB;
+
+
+        for (int x = 1; x < width - 1; x++)
+            for (int y = 1; y < height - 1; y++) {
+
+                boolean flag = false;
+
+                for (int m = -1; m <= 1; m++)
+                    for (int n = -1; n <= 1; n++) {
+
+                        int i = x + m;
+                        int j = y + n;
+
+                        if (i < 0 || j < 0) continue;
+                        if (i > width - 1) continue;
+                        if (j > height - 1) continue;
+
+                        if (image[i][j] == flagValue)
+                            flag = true;
+                    }
+                if (flag) {
+                    int RGB = new Color(flagValue, flagValue, flagValue).getRGB();
+                    dm.bgImg.setRGB(x, y, RGB);
+                }
+            }
+    }
+
+
+    void fillArrayRedColor(double[][] array) {
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++) {
+                Color readColor = new Color(dm.bgImg.getRGB(x, y));
+                int R = readColor.getRed();
+                array[x][y] = R;
+            }
+    }
+
+    double findArrayMin(double[][] array) {
+        double min = array[0][0];
+        for (int i = 0; i < array.length; i++)
+            for (int j = 0; j < array[0].length; j++)
+                if (array[i][j] < min)
+                    min = array[i][j];
+        return min;
+    }
+
+    double findArrayMax(double[][] array) {
+        double max = array[0][0];
+        for (int i = 0; i < array.length; i++)
+            for (int j = 0; j < array[0].length; j++)
+                if (array[i][j] > max)
+                    max = array[i][j];
+        return max;
+    }
 }

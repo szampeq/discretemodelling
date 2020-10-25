@@ -7,6 +7,4 @@ import java.io.IOException;
 
 public class DataManager {
     BufferedImage bgImg;
-
-
 }
