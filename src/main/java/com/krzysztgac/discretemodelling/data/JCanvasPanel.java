@@ -1,4 +1,6 @@
-package com.krzysztgac.discretemodelling;
+package com.krzysztgac.discretemodelling.data;
+
+import com.krzysztgac.discretemodelling.data.DataManager;
 
 import javax.swing.*;
 import java.awt.*;

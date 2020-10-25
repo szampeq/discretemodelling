@@ -1,12 +1,14 @@
 package com.krzysztgac.discretemodelling;
 
+import com.krzysztgac.discretemodelling.data.DataManager;
+import com.krzysztgac.discretemodelling.data.JCanvasPanel;
+import com.krzysztgac.discretemodelling.tools.Utils;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Main extends JFrame {
 
@@ -56,6 +58,7 @@ public class Main extends JFrame {
             rgb[i] = i;
         }
         JComboBox<Integer> binarizationValue = new JComboBox<>(rgb);
+        binarizationValue.setSelectedItem(rgb[180]);
 
         JButton binarization = newButton("Binarization");
         binarization.addActionListener(e -> {
@@ -91,6 +94,18 @@ public class Main extends JFrame {
             canvasPanel.repaint();
         });
 
+        JButton morphOpening = newButton("Morph. Opening");
+        morphOpening.addActionListener(e -> {
+            utils.morphologicalOpening();
+            canvasPanel.repaint();
+        });
+
+        JButton morphClosure = newButton("Morph. Closure");
+        morphClosure.addActionListener(e -> {
+            utils.morphologicalClosure();
+            canvasPanel.repaint();
+        });
+
         JButton reverse = newButton("Reverse");
         reverse.addActionListener(e -> {
             utils.reverse();
@@ -109,9 +124,11 @@ public class Main extends JFrame {
         buttonPanel.add(filter);
         buttonPanel.add(erosion);
         buttonPanel.add(dilatation);
+        buttonPanel.add(morphOpening);
+        buttonPanel.add(morphClosure);
         buttonPanel.add(reverse);
 
-        buttonPanel.setLayout(new GridLayout(12, 1));
+        buttonPanel.setLayout(new GridLayout(14, 1));
 
         // =========== MAIN PANEL ==========
         mainPanel.add(BorderLayout.CENTER, canvasPanel);
@@ -123,7 +140,7 @@ public class Main extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
 
-        this.setSize(new Dimension(760, 370));
+        this.setSize(new Dimension(800, 400));
         this.setLocationRelativeTo(null);
 
         canvasPanel.repaint();

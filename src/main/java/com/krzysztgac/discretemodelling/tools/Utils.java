@@ -1,6 +1,10 @@
-package com.krzysztgac.discretemodelling;
+package com.krzysztgac.discretemodelling.tools;
+
+import com.krzysztgac.discretemodelling.data.DataManager;
 
 import java.awt.*;
+
+import static com.krzysztgac.discretemodelling.tools.SimpleTools.*;
 
 
 public class Utils {
@@ -15,7 +19,7 @@ public class Utils {
         this.height = dm.bgImg.getHeight();
     }
 
-    void imageBrightness(int value) {
+    public void imageBrightness(int value) {
 
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
@@ -33,7 +37,7 @@ public class Utils {
         }
     }
 
-    void binarization(int value) {
+    public void binarization(int value) {
 
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
@@ -54,7 +58,7 @@ public class Utils {
         }
     }
 
-    void reverse() {
+    public void reverse() {
 
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
@@ -74,18 +78,11 @@ public class Utils {
 
     // CONVOLUTION (LowPass Filter, HighPass Filter and Gauss Filter)
 
-    void putFilterOn(String mask){
+    public void putFilterOn(String mask){
 
         double[][] image = new double[width][height];
-/*
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++) {
-                Color readColor = new Color(dm.bgImg.getRGB(x, y));
-                int R = readColor.getRed();
-                image[x][y] = R;
-            }
-*/
-        fillArrayRedColor(image);
+
+        fillArrayRedColor(image, dm.bgImg);
 
         double[][] lowpassFilter = {
                     {1.0/9.0, 1.0/9.0, 1.0/9.0},
@@ -142,10 +139,10 @@ public class Utils {
     }
 
 
-    void erosionDilatation(String function) {
+    public void erosionDilatation(String function) {
 
         double[][] image = new double[width][height];
-        fillArrayRedColor(image);
+        fillArrayRedColor(image, dm.bgImg);
 
         double minRGB = findArrayMin(image);
         double maxRGB = findArrayMax(image);
@@ -182,31 +179,16 @@ public class Utils {
             }
     }
 
-
-    void fillArrayRedColor(double[][] array) {
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++) {
-                Color readColor = new Color(dm.bgImg.getRGB(x, y));
-                int R = readColor.getRed();
-                array[x][y] = R;
-            }
+    public void morphologicalOpening(){
+        erosionDilatation("Erosion");
+        erosionDilatation("Dilatation");
     }
 
-    double findArrayMin(double[][] array) {
-        double min = array[0][0];
-        for (int i = 0; i < array.length; i++)
-            for (int j = 0; j < array[0].length; j++)
-                if (array[i][j] < min)
-                    min = array[i][j];
-        return min;
+    public void morphologicalClosure(){
+        erosionDilatation("Dilatation");
+        erosionDilatation("Erosion");
     }
 
-    double findArrayMax(double[][] array) {
-        double max = array[0][0];
-        for (int i = 0; i < array.length; i++)
-            for (int j = 0; j < array[0].length; j++)
-                if (array[i][j] > max)
-                    max = array[i][j];
-        return max;
-    }
+
+
 }
