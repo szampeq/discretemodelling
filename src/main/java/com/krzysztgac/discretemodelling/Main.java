@@ -1,6 +1,7 @@
 package com.krzysztgac.discretemodelling;
 
 import com.krzysztgac.discretemodelling.data.DataManager;
+import com.krzysztgac.discretemodelling.data.JCanvasCA;
 import com.krzysztgac.discretemodelling.data.JCanvasPanel;
 import com.krzysztgac.discretemodelling.tools.SimpleTools;
 import com.krzysztgac.discretemodelling.tools.Utils;
@@ -10,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.krzysztgac.discretemodelling.tools.SimpleTools.loadImage;
 
@@ -17,7 +19,9 @@ public class Main extends JFrame {
 
     static DataManager dm;
     private final JPanel buttonPanel;
+    private final JPanel mainPanel;
     private static JCanvasPanel canvasPanel;
+    private static JCanvasCA canvasCA;
     static Utils utils;
 
     public Main(String title){
@@ -27,14 +31,65 @@ public class Main extends JFrame {
 
         dm = new DataManager();
         canvasPanel = new JCanvasPanel(dm);
+        canvasCA = new JCanvasCA(251, 251);
 
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
+        buttonPanel = new JPanel();
+
+        // ============ PROGRAM SETTINGS =========
+
+        String[] settings = {"Image", "CA"};
+        JLabel settingsLabel = new JLabel("Select program:");
+        JComboBox<String> programSet = new JComboBox<>(settings);
+        buttonPanel.add(settingsLabel);
+        buttonPanel.add(programSet);
+
+        JOptionPane.showMessageDialog( null, programSet, "Select program", JOptionPane.QUESTION_MESSAGE);
+        String program = Objects.requireNonNull(programSet.getSelectedItem()).toString();
+        System.out.println(program);
 
         // ============ BUTTONS ============
 
-        buttonPanel = new JPanel();
+        if (program.equals("Image"))
+            imageProgram();
+        else if (program.equals("CA"))
+            caProgram();
+        else
+            imageProgram();
 
+        // =========== MAIN PANEL ==========
+
+/*
+        mainPanel.add(BorderLayout.CENTER, canvasCA);
+
+*/
+        mainPanel.add(BorderLayout.EAST, buttonPanel);
+
+        buttonPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        buttonPanel.setBackground(Color.WHITE);
+
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setContentPane(mainPanel);
+
+        this.setSize(new Dimension(800, 400));
+        this.setLocationRelativeTo(null);
+
+        canvasPanel.repaint();
+        canvasCA.repaint();
+    }
+
+    public static void main(String[] args) {
+
+        Main mw = new Main("Discrete Modelling");
+        mw.setVisible(true);
+        loadImage(dm, canvasPanel);
+        utils = new Utils(dm);
+        canvasPanel.repaint();
+        canvasCA.repaint();
+    }
+
+    public void imageProgram(){
         Button refreshImage = new Button("Refresh Image", buttonPanel);
         refreshImage.button.addActionListener(e -> loadImage(dm, canvasPanel));
 
@@ -71,7 +126,8 @@ public class Main extends JFrame {
                 canvasPanel.repaint();
             }
         });
-
+        JLabel TEST = new JLabel("TEST:");
+        canvasCA.add(TEST);
         // FILTERS
 
         String[] filters = {"LowPass", "HighPass", "Gauss"};
@@ -119,34 +175,14 @@ public class Main extends JFrame {
             canvasPanel.repaint();
         });
 
+        buttonPanel.setLayout(new GridLayout(18, 1));
 
-        buttonPanel.setLayout(new GridLayout(14, 1));
-
-        // =========== MAIN PANEL ==========
         mainPanel.add(BorderLayout.CENTER, canvasPanel);
-        mainPanel.add(BorderLayout.EAST, buttonPanel);
         canvasPanel.setBackground(Color.DARK_GRAY);
-        buttonPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-        buttonPanel.setBackground(Color.WHITE);
-
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setContentPane(mainPanel);
-
-        this.setSize(new Dimension(800, 400));
-        this.setLocationRelativeTo(null);
-
-        canvasPanel.repaint();
     }
 
-    public static void main(String[] args) {
-
-        Main mw = new Main("Discrete Modelling");
-        mw.setVisible(true);
-        loadImage(dm, canvasPanel);
-        utils = new Utils(dm);
-        canvasPanel.repaint();
+    public void caProgram(){
 
     }
-
 
 }
