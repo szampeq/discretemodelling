@@ -1,8 +1,9 @@
 package com.krzysztgac.discretemodelling;
 
 import com.krzysztgac.discretemodelling.data.DataManager;
+import com.krzysztgac.discretemodelling.data.JCanvasCA;
 import com.krzysztgac.discretemodelling.data.JCanvasPanel;
-import com.krzysztgac.discretemodelling.tools.CA;
+import com.krzysztgac.discretemodelling.data.CA;
 import com.krzysztgac.discretemodelling.tools.Utils;
 
 import javax.swing.*;
@@ -18,9 +19,10 @@ public class Main extends JFrame {
     static DataManager dm;
     private final JPanel buttonPanel;
     private final JPanel mainPanel;
-    private static CA caSetup;
     private static JCanvasPanel canvasPanel;
     static Utils utils;
+    private static CA caSetup;
+    private static JCanvasCA caPanel;
 
     public Main(String title){
         super(title);
@@ -29,7 +31,9 @@ public class Main extends JFrame {
 
         dm = new DataManager();
         canvasPanel = new JCanvasPanel(dm);
+
         caSetup = new CA();
+        caPanel = new JCanvasCA(caSetup);
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -212,12 +216,9 @@ public class Main extends JFrame {
         Button run = new Button("Run", buttonPanel);
         run.button.addActionListener(e -> {
             selectedMesh.set((Integer) meshSize.getSelectedItem());
-            caSetup.setMeshSize(selectedMesh.get());
-            caSetup.setRuleSet(ruleValue.intValue());
-            caSetup.getCanvasCA().repaint();
+
         });
 
-        mainPanel.add(BorderLayout.CENTER, caSetup.getCanvasCA());
     }
 
 }
