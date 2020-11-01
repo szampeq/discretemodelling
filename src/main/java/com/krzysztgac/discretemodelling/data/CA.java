@@ -12,14 +12,8 @@ public class CA {
 
     int[] ruleSet;
     int meshSize;
+    boolean boundaryPeriodic = false;
     int[][] matrix;
-
-
-    public CA(int rule, int meshSize){
-        this.ruleSet = numberToBinaryArray(rule, 8);
-        this.meshSize = meshSize;
-        this.matrix = new int[meshSize][meshSize];
-    }
 
     public CA(){};
 
@@ -39,5 +33,21 @@ public class CA {
         this.meshSize = meshSize;
     }
 
+    public boolean getBoundaryPeriodic() {
+        return boundaryPeriodic;
+    }
 
+    public void setBoundaryPeriodic(boolean boundaryPeriodic) {
+        this.boundaryPeriodic = boundaryPeriodic;
+    }
+
+    public void fillMatrix() {
+        matrix = new int[meshSize][meshSize];
+        for (int i = 0; i < meshSize; i++) {
+            for (int j = 0; j < meshSize; j++) {
+                matrix[i][j] = 0;
+            }
+        }
+        matrix[meshSize/2][meshSize/2] = 1;
+    }
 }

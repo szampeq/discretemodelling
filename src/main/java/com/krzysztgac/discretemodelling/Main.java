@@ -9,6 +9,7 @@ import com.krzysztgac.discretemodelling.tools.Utils;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Hashtable;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.krzysztgac.discretemodelling.data.DataManager.programSettings;
@@ -182,6 +183,7 @@ public class Main extends JFrame {
         JComboBox<String> selectCondition = new JComboBox<>(boundaryConditions);
         buttonPanel.add(selectCondition);
 
+
         JLabel ruleLabel = new JLabel("Waiting for rule value...");
         buttonPanel.add(ruleLabel);
 
@@ -214,9 +216,17 @@ public class Main extends JFrame {
 
         Button run = new Button("Run", buttonPanel);
         run.button.addActionListener(e -> {
+            // MESH SIZE
             selectedMesh.set((Integer) meshSize.getSelectedItem());
-            canvasCA.caData.setRuleSet(ruleValue.intValue());
             canvasCA.caData.setMeshSize(selectedMesh.intValue());
+            // RULESET
+            canvasCA.caData.setRuleSet(ruleValue.intValue());
+            // BOUNDARY CONDITION
+            String selectedBoundary =  (String) selectCondition.getSelectedItem();
+            canvasCA.caData.setBoundaryPeriodic(selectedBoundary.equals("Periodic"));
+            // SET MATRIX
+            canvasCA.caData.fillMatrix();
+            // REPAINT
             canvasCA.repaint();
         });
 

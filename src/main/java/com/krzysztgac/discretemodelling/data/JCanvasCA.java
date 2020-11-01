@@ -16,7 +16,14 @@ public class JCanvasCA extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.black);
-        g2.drawLine(0, 0, caData.meshSize/2, caData.meshSize/2);
+
+        for (int i = 0; i < caData.meshSize; i++) {
+            for (int j = 0; j < caData.meshSize; j++) {
+                if(caData.matrix[i][j] == 1)
+                    g2.drawLine(i, j, i, j);
+            }
+        }
+
         repaint();
     }
 
