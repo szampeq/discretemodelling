@@ -20,9 +20,9 @@ public class Main extends JFrame {
     private final JPanel buttonPanel;
     private final JPanel mainPanel;
     private static JCanvasPanel canvasPanel;
+    static CA caSetup;
+    private static JCanvasCA canvasCA;
     static Utils utils;
-    private static CA caSetup;
-    private static JCanvasCA caPanel;
 
     public Main(String title){
         super(title);
@@ -31,9 +31,8 @@ public class Main extends JFrame {
 
         dm = new DataManager();
         canvasPanel = new JCanvasPanel(dm);
-
         caSetup = new CA();
-        caPanel = new JCanvasCA(caSetup);
+        canvasCA = new JCanvasCA(caSetup);
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -216,8 +215,12 @@ public class Main extends JFrame {
         Button run = new Button("Run", buttonPanel);
         run.button.addActionListener(e -> {
             selectedMesh.set((Integer) meshSize.getSelectedItem());
-
+            canvasCA.caData.setRuleSet(ruleValue.intValue());
+            canvasCA.caData.setMeshSize(selectedMesh.intValue());
+            canvasCA.repaint();
         });
+
+        mainPanel.add(canvasCA);
 
     }
 

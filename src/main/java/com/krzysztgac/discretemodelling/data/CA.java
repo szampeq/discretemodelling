@@ -15,13 +15,29 @@ public class CA {
     int[][] matrix;
 
 
-    public CA(int[] ruleSet, int meshSize){
-        this.ruleSet = ruleSet;
+    public CA(int rule, int meshSize){
+        this.ruleSet = numberToBinaryArray(rule, 8);
         this.meshSize = meshSize;
         this.matrix = new int[meshSize][meshSize];
     }
 
     public CA(){};
+
+    public int[] getRuleSet() {
+        return ruleSet;
+    }
+
+    public void setRuleSet(int rule) {
+        this.ruleSet = numberToBinaryArray(rule, 8);
+    }
+
+    public int getMeshSize() {
+        return meshSize;
+    }
+
+    public void setMeshSize(int meshSize) {
+        this.meshSize = meshSize;
+    }
 
 
 }

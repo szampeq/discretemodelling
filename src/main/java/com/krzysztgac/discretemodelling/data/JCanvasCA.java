@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class JCanvasCA extends JPanel {
 
-    CA caData;
+    public CA caData;
 
     public JCanvasCA(CA caData){
         this.caData = caData;
@@ -16,8 +16,8 @@ public class JCanvasCA extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.black);
-        g2.drawLine(0, 0, 0, 0);
-
+        g2.drawLine(0, 0, caData.meshSize/2, caData.meshSize/2);
+        repaint();
     }
 
     @Override
