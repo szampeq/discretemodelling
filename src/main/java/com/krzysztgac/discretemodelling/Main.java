@@ -1,18 +1,16 @@
 package com.krzysztgac.discretemodelling;
 
 import com.krzysztgac.discretemodelling.data.DataManager;
-import com.krzysztgac.discretemodelling.data.JCanvasCA;
 import com.krzysztgac.discretemodelling.data.JCanvasPanel;
-import com.krzysztgac.discretemodelling.tools.SimpleTools;
+import com.krzysztgac.discretemodelling.tools.CA;
 import com.krzysztgac.discretemodelling.tools.Utils;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
+import java.util.Hashtable;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.krzysztgac.discretemodelling.data.DataManager.programSettings;
 import static com.krzysztgac.discretemodelling.tools.SimpleTools.loadImage;
 
 public class Main extends JFrame {
@@ -20,8 +18,8 @@ public class Main extends JFrame {
     static DataManager dm;
     private final JPanel buttonPanel;
     private final JPanel mainPanel;
+    private static CA caSetup;
     private static JCanvasPanel canvasPanel;
-    private static JCanvasCA canvasCA;
     static Utils utils;
 
     public Main(String title){
@@ -31,7 +29,7 @@ public class Main extends JFrame {
 
         dm = new DataManager();
         canvasPanel = new JCanvasPanel(dm);
-        canvasCA = new JCanvasCA(251, 251);
+        caSetup = new CA();
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -39,31 +37,16 @@ public class Main extends JFrame {
 
         // ============ PROGRAM SETTINGS =========
 
-        String[] settings = {"Image", "CA"};
-        JLabel settingsLabel = new JLabel("Select program:");
-        JComboBox<String> programSet = new JComboBox<>(settings);
-        buttonPanel.add(settingsLabel);
-        buttonPanel.add(programSet);
-
-        JOptionPane.showMessageDialog( null, programSet, "Select program", JOptionPane.QUESTION_MESSAGE);
-        String program = Objects.requireNonNull(programSet.getSelectedItem()).toString();
-        System.out.println(program);
-
-        // ============ BUTTONS ============
-
-        if (program.equals("Image"))
+        String setting = programSettings();
+        if (setting.equals("Image"))
             imageProgram();
-        else if (program.equals("CA"))
+        else if (setting.equals("CA"))
             caProgram();
         else
             imageProgram();
 
         // =========== MAIN PANEL ==========
 
-/*
-        mainPanel.add(BorderLayout.CENTER, canvasCA);
-
-*/
         mainPanel.add(BorderLayout.EAST, buttonPanel);
 
         buttonPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
@@ -75,8 +58,6 @@ public class Main extends JFrame {
         this.setSize(new Dimension(800, 400));
         this.setLocationRelativeTo(null);
 
-        canvasPanel.repaint();
-        canvasCA.repaint();
     }
 
     public static void main(String[] args) {
@@ -85,8 +66,6 @@ public class Main extends JFrame {
         mw.setVisible(true);
         loadImage(dm, canvasPanel);
         utils = new Utils(dm);
-        canvasPanel.repaint();
-        canvasCA.repaint();
     }
 
     public void imageProgram(){
@@ -126,8 +105,7 @@ public class Main extends JFrame {
                 canvasPanel.repaint();
             }
         });
-        JLabel TEST = new JLabel("TEST:");
-        canvasCA.add(TEST);
+
         // FILTERS
 
         String[] filters = {"LowPass", "HighPass", "Gauss"};
@@ -183,6 +161,63 @@ public class Main extends JFrame {
 
     public void caProgram(){
 
+        JLabel meshLabel = new JLabel("Select mesh size:");
+        Integer[] meshValue = new Integer[512];
+        for (int i = 0; i < 512; i++){
+            meshValue[i] = i;
+        }
+        JComboBox<Integer> meshSize = new JComboBox<>(meshValue);
+        meshSize.setSelectedItem(meshValue[256]);
+
+        buttonPanel.add(meshLabel);
+        buttonPanel.add(meshSize);
+
+        JLabel condtionsLabel = new JLabel("Boundary Conditions:");
+        buttonPanel.add(condtionsLabel);
+
+        String[] boundaryConditions = {"Periodic", "1-edges"};
+        JComboBox<String> selectCondition = new JComboBox<>(boundaryConditions);
+        buttonPanel.add(selectCondition);
+
+        JLabel ruleLabel = new JLabel("Waiting for rule value...");
+        buttonPanel.add(ruleLabel);
+
+        JSlider ruleSlider = new JSlider(0, 225);
+        AtomicInteger ruleValue = new AtomicInteger();
+        ruleSlider.addChangeListener(e-> {
+            ruleValue.set(ruleSlider.getValue());
+            ruleLabel.setText("Rule: " + ruleValue);
+        });
+
+        ruleSlider.setMajorTickSpacing(30);
+        ruleSlider.setPaintTicks(true);
+        Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
+        labelTable.put(0, new JLabel("0") );
+        labelTable.put(30, new JLabel("30") );
+        labelTable.put(60, new JLabel("60") );
+        labelTable.put(90, new JLabel("90") );
+        labelTable.put(120, new JLabel("120") );
+        labelTable.put(150, new JLabel("150") );
+        labelTable.put(180, new JLabel("180") );
+        labelTable.put(225, new JLabel("225") );
+
+        ruleSlider.setLabelTable( labelTable );
+        ruleSlider.setPaintLabels(true);
+        buttonPanel.add(ruleSlider);
+
+        AtomicInteger selectedMesh = new AtomicInteger();
+        buttonPanel.setLayout(new GridLayout(7, 1));
+
+
+        Button run = new Button("Run", buttonPanel);
+        run.button.addActionListener(e -> {
+            selectedMesh.set((Integer) meshSize.getSelectedItem());
+            caSetup.setMeshSize(selectedMesh.get());
+            caSetup.setRuleSet(ruleValue.intValue());
+            caSetup.getCanvasCA().repaint();
+        });
+
+        mainPanel.add(BorderLayout.CENTER, caSetup.getCanvasCA());
     }
 
 }

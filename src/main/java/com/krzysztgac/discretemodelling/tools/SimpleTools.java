@@ -46,4 +46,32 @@ public abstract class SimpleTools {
                 array[x][y] = R;
             }
     }
+
+    public static int[] numberToBinaryArray(int number, int sizeArray) {
+        String binaryString = Integer.toBinaryString(number);
+        int[] binaryArray = new int[sizeArray];
+
+        // Creating array of string length
+        char[] ch = new char[binaryString.length()];
+
+        // Copy character by character into array
+        for (int i = 0; i < binaryString.length(); i++) {
+            ch[i] = binaryString.charAt(i);
+        }
+
+        int sizeDifference = binaryArray.length - ch.length;
+
+        for (int i = 0; i < sizeDifference; i++) {
+            binaryArray[i] = 0;
+        }
+
+        for (int j = sizeDifference; j < binaryArray.length; j++) {
+            if (ch[j-sizeDifference] == '0')
+                binaryArray[j] = 0;
+            else
+                binaryArray[j] = 1;
+        }
+        return binaryArray;
+    }
+
 }
