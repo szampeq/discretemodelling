@@ -166,8 +166,8 @@ public class Main extends JFrame {
     public void caProgram(){
 
         JLabel meshLabel = new JLabel("Select mesh size:");
-        Integer[] meshValue = new Integer[512];
-        for (int i = 0; i < 512; i++){
+        Integer[] meshValue = new Integer[2000];
+        for (int i = 0; i < 2000; i++){
             meshValue[i] = i;
         }
         JComboBox<Integer> meshSize = new JComboBox<>(meshValue);
@@ -226,6 +226,8 @@ public class Main extends JFrame {
             canvasCA.caData.setBoundaryPeriodic(selectedBoundary.equals("Periodic"));
             // SET MATRIX
             canvasCA.caData.fillMatrix();
+            canvasCA.caData.generateCA();
+
             // REPAINT
             canvasCA.repaint();
         });
