@@ -1,11 +1,5 @@
 package com.krzysztgac.discretemodelling.data;
 
-import com.krzysztgac.discretemodelling.data.JCanvasCA;
-
-import javax.swing.*;
-
-import java.awt.*;
-
 import static com.krzysztgac.discretemodelling.tools.SimpleTools.numberToBinaryArray;
 
 public class CA {
@@ -14,7 +8,6 @@ public class CA {
     int meshSize;
     boolean boundaryPeriodic = false;
     int[][] matrix;
-    int generation;
 
     public CA(){};
 
@@ -88,10 +81,22 @@ public class CA {
 
     int rules (int l, int c, int r) {
 
-        String sum = "" + l + c + r;
-        int index = Integer.parseInt(sum, 2); // String -> Int -> Binary System
-        return ruleSet[index];
-
+        if (l == 1 && c == 1 && r == 1)
+            return ruleSet[0];
+        else if (l == 1 && c == 1 && r == 0)
+            return ruleSet[1];
+        else if (l == 1 && c == 0 && r == 1)
+            return ruleSet[2];
+        else if (l == 1 && c == 0 && r == 0)
+            return ruleSet[3];
+        else if (l == 0 && c == 1 && r == 1)
+            return ruleSet[4];
+        else if (l == 0 && c == 1 && r == 0)
+            return ruleSet[5];
+        else if (l == 0 && c == 0 && r == 1)
+            return ruleSet[6];
+        else
+            return ruleSet[7];
     }
 
 
