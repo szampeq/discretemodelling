@@ -62,7 +62,7 @@ public class Main extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
 
-        this.setSize(new Dimension(900, 750));
+        this.setSize(new Dimension(800, 710));
         this.setLocationRelativeTo(null);
 
     }
@@ -247,7 +247,7 @@ public class Main extends JFrame {
             meshValue[i-1] = i;
         }
         JComboBox<Integer> meshSize = new JComboBox<>(meshValue);
-        meshSize.setSelectedItem(meshValue[70]);
+        meshSize.setSelectedItem(meshValue[64]);
 
         buttonPanel.add(meshLabel);
         buttonPanel.add(meshSize);
@@ -272,7 +272,7 @@ public class Main extends JFrame {
 
         AtomicInteger selectedMesh = new AtomicInteger();
         AtomicInteger selectedCellSize = new AtomicInteger();
-        buttonPanel.setLayout(new GridLayout(7, 1));
+        buttonPanel.setLayout(new GridLayout(14, 1));
 
 
         Button run = new Button("Run game!", buttonPanel);
@@ -285,6 +285,7 @@ public class Main extends JFrame {
             golPanel.golData.setCellSize(selectedCellSize.intValue());
             // INITIAL STATE
             String selectedState =  (String) selectState.getSelectedItem();
+            golPanel.golData.setInitialState(selectedState);
             // SET MATRIX
             golPanel.golData.fillMatrix();
             //golPanel.golData.generateCA();
