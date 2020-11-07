@@ -1,9 +1,6 @@
 package com.krzysztgac.discretemodelling;
 
-import com.krzysztgac.discretemodelling.data.DataManager;
-import com.krzysztgac.discretemodelling.data.JCanvasCA;
-import com.krzysztgac.discretemodelling.data.JCanvasPanel;
-import com.krzysztgac.discretemodelling.data.CA;
+import com.krzysztgac.discretemodelling.data.*;
 import com.krzysztgac.discretemodelling.tools.Utils;
 
 import javax.swing.*;
@@ -23,6 +20,8 @@ public class Main extends JFrame {
     private static JCanvasPanel canvasPanel;
     static CA caSetup;
     private static JCanvasCA canvasCA;
+    static GoL gameSetup;
+    private static JGameOfLife golPanel;
     static Utils utils;
 
     public Main(String title){
@@ -34,6 +33,8 @@ public class Main extends JFrame {
         canvasPanel = new JCanvasPanel(dm);
         caSetup = new CA();
         canvasCA = new JCanvasCA(caSetup);
+        gameSetup = new GoL();
+        golPanel = new JGameOfLife(gameSetup);
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -46,6 +47,8 @@ public class Main extends JFrame {
             imageProgram();
         else if (setting.equals("CA"))
             caProgram();
+        else if (setting.equals("Game of Life"))
+            gameOfLife();
         else
             imageProgram();
 
@@ -59,7 +62,7 @@ public class Main extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
 
-        this.setSize(new Dimension(800, 400));
+        this.setSize(new Dimension(900, 750));
         this.setLocationRelativeTo(null);
 
     }
@@ -233,6 +236,49 @@ public class Main extends JFrame {
         });
 
         mainPanel.add(canvasCA);
+
+    }
+
+    public void gameOfLife(){
+
+        JLabel meshLabel = new JLabel("Select mesh size:");
+        Integer[] meshValue = new Integer[100];
+        for (int i = 1; i <= 100; i++){
+            meshValue[i-1] = i;
+        }
+        JComboBox<Integer> meshSize = new JComboBox<>(meshValue);
+        meshSize.setSelectedItem(meshValue[70]);
+
+        buttonPanel.add(meshLabel);
+        buttonPanel.add(meshSize);
+
+        JLabel condtionsLabel = new JLabel("Initial States:");
+        buttonPanel.add(condtionsLabel);
+
+        String[] initialStates = {"Unchanging", "Glider", "Oscilation", "Manual", "Random"};
+        JComboBox<String> selectState = new JComboBox<>(initialStates);
+        buttonPanel.add(selectState);
+
+        AtomicInteger selectedMesh = new AtomicInteger();
+        buttonPanel.setLayout(new GridLayout(5, 1));
+
+
+        Button run = new Button("Run game!", buttonPanel);
+        run.button.addActionListener(e -> {
+            // MESH SIZE
+            selectedMesh.set((Integer) meshSize.getSelectedItem());
+            golPanel.golData.setMeshSize(selectedMesh.intValue());
+            // INITIAL STATE
+            String selectedState =  (String) selectState.getSelectedItem();
+            // SET MATRIX
+            golPanel.golData.fillMatrix();
+            //golPanel.golData.generateCA();
+
+            // REPAINT
+            golPanel.repaint();
+        });
+
+        mainPanel.add(golPanel);
 
     }
 

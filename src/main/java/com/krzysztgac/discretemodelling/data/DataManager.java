@@ -11,7 +11,7 @@ public class DataManager {
     public BufferedImage bgImg;
 
     public static String programSettings(){
-        String[] settings = {"Image", "CA"};
+        String[] settings = {"Image", "CA", "Game of Life"};
         JComboBox<String> programSet = new JComboBox<>(settings);
 
         JOptionPane.showMessageDialog( null, programSet, "Select program", JOptionPane.QUESTION_MESSAGE);
