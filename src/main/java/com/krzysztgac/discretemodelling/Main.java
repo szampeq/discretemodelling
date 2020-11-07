@@ -324,7 +324,7 @@ public class Main extends JFrame {
                 int cellY = y/golPanel.golData.getCellSize();
 
                 if (isBoardCreated.get())
-                    golPanel.golData.fillMatrixCell(cellX, cellY);
+                    golPanel.golData.changeMatrixCell(cellX, cellY);
             }
 
             @Override

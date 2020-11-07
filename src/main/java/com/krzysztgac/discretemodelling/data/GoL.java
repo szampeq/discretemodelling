@@ -111,8 +111,11 @@ public class GoL {
         }
     }
 
-    public void fillMatrixCell(int x, int y) {
+    public void changeMatrixCell(int x, int y) {
         if (x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length)
-            matrix[x][y] = 1;
+            if (matrix[x][y] == 0)
+                matrix[x][y] = 1;
+            else
+                matrix[x][y] = 0;
     }
 }
