@@ -5,9 +5,12 @@ import static com.krzysztgac.discretemodelling.tools.SimpleTools.numberToBinaryA
 public class GoL {
 
     int meshSize;
+    int cellSize;
     int[][] matrix;
 
-    public GoL(){};
+    public GoL(){
+        this.cellSize = 10;
+    };
 
     public int getMeshSize() {
         return meshSize;
@@ -15,6 +18,14 @@ public class GoL {
 
     public void setMeshSize(int meshSize) {
         this.meshSize = meshSize;
+    }
+
+    public int getCellSize() {
+        return cellSize;
+    }
+
+    public void setCellSize(int cellSize) {
+        this.cellSize = cellSize;
     }
 
     public void fillMatrix() {

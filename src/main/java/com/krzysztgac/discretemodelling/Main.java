@@ -252,15 +252,27 @@ public class Main extends JFrame {
         buttonPanel.add(meshLabel);
         buttonPanel.add(meshSize);
 
-        JLabel condtionsLabel = new JLabel("Initial States:");
-        buttonPanel.add(condtionsLabel);
+        JLabel cellSizeLabel = new JLabel("Select cell size:");
+        Integer[] cellSizeValue = new Integer[20];
+        for (int i = 1; i <= 20; i++){
+            cellSizeValue[i-1] = i;
+        }
+        JComboBox<Integer> cellSize = new JComboBox<>(cellSizeValue);
+        cellSize.setSelectedItem(cellSizeValue[9]);
+
+        buttonPanel.add(cellSizeLabel);
+        buttonPanel.add(cellSize);
+
+        JLabel conditionsLabel = new JLabel("Initial States:");
+        buttonPanel.add(conditionsLabel);
 
         String[] initialStates = {"Unchanging", "Glider", "Oscilation", "Manual", "Random"};
         JComboBox<String> selectState = new JComboBox<>(initialStates);
         buttonPanel.add(selectState);
 
         AtomicInteger selectedMesh = new AtomicInteger();
-        buttonPanel.setLayout(new GridLayout(5, 1));
+        AtomicInteger selectedCellSize = new AtomicInteger();
+        buttonPanel.setLayout(new GridLayout(7, 1));
 
 
         Button run = new Button("Run game!", buttonPanel);
@@ -268,6 +280,9 @@ public class Main extends JFrame {
             // MESH SIZE
             selectedMesh.set((Integer) meshSize.getSelectedItem());
             golPanel.golData.setMeshSize(selectedMesh.intValue());
+            // CELL SIZE
+            selectedCellSize.set((Integer) cellSize.getSelectedItem());
+            golPanel.golData.setCellSize(selectedCellSize.intValue());
             // INITIAL STATE
             String selectedState =  (String) selectState.getSelectedItem();
             // SET MATRIX
