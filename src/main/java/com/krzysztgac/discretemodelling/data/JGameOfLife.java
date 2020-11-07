@@ -24,7 +24,7 @@ public class JGameOfLife extends JPanel {
         for (int j = 0; j < MS; j++) {
             for (int i = 0; i < MS; i++) {
                 if(golData.matrix[i][j] == 1)
-                    g2.fillRect(i * CS, j * CS + 10, CS, CS);
+                    g2.fillRect(i * CS + 10, j * CS + 10, CS, CS);
             }
         }
 

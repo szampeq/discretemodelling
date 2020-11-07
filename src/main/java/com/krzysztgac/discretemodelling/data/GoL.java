@@ -1,5 +1,7 @@
 package com.krzysztgac.discretemodelling.data;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import static com.krzysztgac.discretemodelling.tools.SimpleTools.numberToBinaryArray;
 
 public class GoL {
@@ -59,7 +61,7 @@ public class GoL {
     }
 
 
-    void zeroMatrix() {
+    public void zeroMatrix() {
         for (int i = 0; i < meshSize; i++)
             for (int j = 0; j < meshSize; j++)
                 matrix[i][j] = 0;
@@ -67,32 +69,46 @@ public class GoL {
 
     void unchangingMatrix() {
         zeroMatrix();
-        matrix[meshSize / 2][meshSize / 2 - 1] = 1;
-        matrix[meshSize / 2][meshSize / 2 + 1] = 1;
-        matrix[meshSize / 2 + 1][meshSize / 2 - 1] = 1;
-        matrix[meshSize / 2 + 1][meshSize / 2 + 1] = 1;
-        matrix[meshSize / 2 - 1][meshSize / 2] = 1;
-        matrix[meshSize / 2 + 2][meshSize / 2] = 1;
+        if (meshSize > 3) {
+            matrix[meshSize / 2][meshSize / 2 - 1] = 1;
+            matrix[meshSize / 2][meshSize / 2 + 1] = 1;
+            matrix[meshSize / 2 + 1][meshSize / 2 - 1] = 1;
+            matrix[meshSize / 2 + 1][meshSize / 2 + 1] = 1;
+            matrix[meshSize / 2 - 1][meshSize / 2] = 1;
+            matrix[meshSize / 2 + 2][meshSize / 2] = 1;
+        }
     }
 
     void gliderMatrix() {
         zeroMatrix();
-        matrix[meshSize / 2][meshSize / 2 - 1] = 1;
-        matrix[meshSize / 2 - 1][meshSize / 2 - 1] = 1;
-        matrix[meshSize / 2 - 1][meshSize / 2] = 1;
-        matrix[meshSize / 2 - 2][meshSize / 2] = 1;
-        matrix[meshSize / 2][meshSize / 2 + 1] = 1;
+        if (meshSize > 2) {
+            matrix[meshSize / 2 + 1][meshSize / 2 - 1] = 1;
+            matrix[meshSize / 2][meshSize / 2 - 1] = 1;
+            matrix[meshSize / 2][meshSize / 2] = 1;
+            matrix[meshSize / 2 - 1][meshSize / 2] = 1;
+            matrix[meshSize / 2 + 1][meshSize / 2 + 1] = 1;
+        }
     }
 
     void oscilationMatrix() {
         zeroMatrix();
-        matrix[meshSize / 2][meshSize / 2 - 1] = 1;
-        matrix[meshSize / 2][meshSize / 2] = 1;
-        matrix[meshSize / 2][meshSize / 2 + 1] = 1;
+        if (meshSize > 2) {
+            matrix[meshSize / 2][meshSize / 2 - 1] = 1;
+            matrix[meshSize / 2][meshSize / 2] = 1;
+            matrix[meshSize / 2][meshSize / 2 + 1] = 1;
+        }
     }
 
     void randomMatrix() {
         zeroMatrix();
+        // number of random points (25-75% mesh)
+        int randomPoints = ThreadLocalRandom.current().nextInt(meshSize/4, meshSize/4 * 3);
+        // to simplify, points can cover each other
+        for (int i = 0; i < randomPoints; i++) {
+            int randomX = ThreadLocalRandom.current().nextInt(0, meshSize - 1);
+            int randomY = ThreadLocalRandom.current().nextInt(0, meshSize - 1);
+            matrix[randomX][randomY] = 1;
+        }
 
     }
 }

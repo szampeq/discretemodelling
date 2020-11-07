@@ -266,17 +266,23 @@ public class Main extends JFrame {
         JLabel conditionsLabel = new JLabel("Initial States:");
         buttonPanel.add(conditionsLabel);
 
-        String[] initialStates = {"Unchanging", "Glider", "Oscilation", "Manual", "Random"};
+        String[] initialStates = {"Unchanging", "Glider", "Oscilation", "Random", "Manual"};
         JComboBox<String> selectState = new JComboBox<>(initialStates);
+
         buttonPanel.add(selectState);
 
         AtomicInteger selectedMesh = new AtomicInteger();
         AtomicInteger selectedCellSize = new AtomicInteger();
         buttonPanel.setLayout(new GridLayout(14, 1));
 
+        Button clear = new Button("Clear surface", buttonPanel);
+        clear.button.addActionListener(e -> {
+            golPanel.golData.zeroMatrix();
+            golPanel.repaint();
+        });
 
-        Button run = new Button("Run game!", buttonPanel);
-        run.button.addActionListener(e -> {
+        Button board = new Button("Create board", buttonPanel);
+        board.button.addActionListener(e -> {
             // MESH SIZE
             selectedMesh.set((Integer) meshSize.getSelectedItem());
             golPanel.golData.setMeshSize(selectedMesh.intValue());
