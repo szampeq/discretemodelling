@@ -51,14 +51,20 @@ public class Main extends JFrame {
         // ============ PROGRAM SETTINGS =========
 
         String setting = programSettings();
-        if (setting.equals("Image"))
-            imageProgram();
-        else if (setting.equals("CA"))
-            caProgram();
-        else if (setting.equals("Game of Life"))
-            gameOfLife();
-        else
-            imageProgram();
+        switch (setting) {
+            case "Image":
+                imageProgram();
+                break;
+            case "CA":
+                caProgram();
+                break;
+            case "Game of Life":
+                gameOfLife();
+                break;
+            default:
+                imageProgram();
+                break;
+        }
 
         // =========== MAIN PANEL ==========
 
@@ -70,7 +76,7 @@ public class Main extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
 
-        this.setSize(new Dimension(800, 710));
+        this.setSize(new Dimension(820, 710));
         this.setLocationRelativeTo(null);
 
     }
@@ -279,8 +285,17 @@ public class Main extends JFrame {
 
         buttonPanel.add(selectState);
 
+        JLabel neighborhoodLabel = new JLabel("Select neighborhood:");
+        buttonPanel.add(neighborhoodLabel);
+
+        String[] neighborhoods = {"Moore", "Neumann"};
+        JComboBox<String> selectNeighborhood = new JComboBox<>(neighborhoods);
+
+        buttonPanel.add(selectNeighborhood);
+
         AtomicInteger selectedMesh = new AtomicInteger();
         AtomicInteger selectedCellSize = new AtomicInteger();
+
         buttonPanel.setLayout(new GridLayout(14, 1));
 
         Button clear = new Button("Clear surface", buttonPanel);
@@ -301,6 +316,9 @@ public class Main extends JFrame {
             // INITIAL STATE
             String selectedState =  (String) selectState.getSelectedItem();
             golPanel.golData.setInitialState(selectedState);
+            // NEIGHBORHOOD
+            // String selectedNeighborhood = (String) selectNeighborhood.getSelectedItem();
+            // golPanel.golData.setNeighborhood(selectedNeighborhood);
             // SET MATRIX
             golPanel.golData.fillMatrix();
             //golPanel.golData.generateCA();
@@ -308,6 +326,8 @@ public class Main extends JFrame {
             // REPAINT
             golPanel.repaint();
         });
+
+        Button startGame = new Button("Start game!", buttonPanel);
 
         mainPanel.add(golPanel);
 
