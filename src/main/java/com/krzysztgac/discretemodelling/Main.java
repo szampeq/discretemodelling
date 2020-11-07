@@ -1,3 +1,9 @@
+/*
+ Discrete modelling classes (AGH)
+         @author  Krzysztof Gąciarz
+         Github-project: https://github.com/szampeq/discretemodelling
+ */
+
 package com.krzysztgac.discretemodelling;
 
 import com.krzysztgac.discretemodelling.data.*;
@@ -5,6 +11,8 @@ import com.krzysztgac.discretemodelling.tools.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Hashtable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -281,6 +289,7 @@ public class Main extends JFrame {
             golPanel.repaint();
         });
 
+        AtomicBoolean isBoardCreated = new AtomicBoolean(false);
         Button board = new Button("Create board", buttonPanel);
         board.button.addActionListener(e -> {
             // MESH SIZE
@@ -295,13 +304,33 @@ public class Main extends JFrame {
             // SET MATRIX
             golPanel.golData.fillMatrix();
             //golPanel.golData.generateCA();
-
+            isBoardCreated.set(true);
             // REPAINT
             golPanel.repaint();
         });
 
         mainPanel.add(golPanel);
 
+        addMouseListener(new MouseAdapter() {
+
+            final int windowXCorrection = 17;
+            final int windowYCorrection = 40;
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int x = e.getX() - windowXCorrection;
+                int y = e.getY() - windowYCorrection;
+                int cellX = x/golPanel.golData.getCellSize();
+                int cellY = y/golPanel.golData.getCellSize();
+
+                if (isBoardCreated.get())
+                    golPanel.golData.fillMatrixCell(cellX, cellY);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+        });
     }
 
 }

@@ -109,6 +109,10 @@ public class GoL {
             int randomY = ThreadLocalRandom.current().nextInt(0, meshSize - 1);
             matrix[randomX][randomY] = 1;
         }
+    }
 
+    public void fillMatrixCell(int x, int y) {
+        if (x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length)
+            matrix[x][y] = 1;
     }
 }
