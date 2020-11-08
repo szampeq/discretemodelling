@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Hashtable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -330,12 +332,30 @@ public class Main extends JFrame {
         });
 
         Button startGame = new Button("Start game!", buttonPanel);
+        AtomicBoolean isGameStarted = new AtomicBoolean(false);
+
+        // THREAD TO RUN GAME
+
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(() -> {
+
+            if (isGameStarted.get()) {
+                golPanel.golData.cellNeighborhood();
+            }
+
+        }, 0, 200, TimeUnit.MILLISECONDS);
+
+        // ========================================================
+
         startGame.button.addActionListener(e -> {
-            if (isBoardCreated.get())
-                    golPanel.golData.cellNeighborhood();
+            if (isBoardCreated.get()) {
+                isGameStarted.set(true);
+            }
         });
 
         Button stopGame = new Button("Stop game!", buttonPanel);
+
+        stopGame.button.addActionListener(e -> isGameStarted.set(false));
 
         mainPanel.add(golPanel);
 
