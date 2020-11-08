@@ -361,13 +361,14 @@ public class Main extends JFrame {
 
         addMouseListener(new MouseAdapter() {
 
-            final int windowXCorrection = 17;
-            final int windowYCorrection = 40;
+            final int windowXCorrection = 7;
+            final int windowYCorrection = 30;
 
             @Override
             public void mousePressed(MouseEvent e) {
-                int x = e.getX() - windowXCorrection;
-                int y = e.getY() - windowYCorrection;
+                int x = e.getX() - (windowXCorrection + golPanel.golData.getCellSize());
+                int y = e.getY() - (windowYCorrection + golPanel.golData.getCellSize());
+
                 int cellX = x/golPanel.golData.getCellSize();
                 int cellY = y/golPanel.golData.getCellSize();
 
