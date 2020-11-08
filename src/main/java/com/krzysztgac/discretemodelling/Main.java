@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.Hashtable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -359,10 +360,10 @@ public class Main extends JFrame {
 
         mainPanel.add(golPanel);
 
-        addMouseListener(new MouseAdapter() {
+        final int windowXCorrection = 7;
+        final int windowYCorrection = 30;
 
-            final int windowXCorrection = 7;
-            final int windowYCorrection = 30;
+        addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -376,8 +377,26 @@ public class Main extends JFrame {
                     golPanel.golData.changeMatrixCell(cellX, cellY);
             }
 
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
             @Override
-            public void mouseReleased(MouseEvent e) {
+            public void mouseDragged(MouseEvent e) {
+
+                super.mouseDragged(e);
+                int x = e.getX() - (windowXCorrection + golPanel.golData.getCellSize());
+                int y = e.getY() - (windowYCorrection + golPanel.golData.getCellSize());
+
+                int cellX = x/golPanel.golData.getCellSize();
+                int cellY = y/golPanel.golData.getCellSize();
+
+                if (isBoardCreated.get()){
+                    if (SwingUtilities.isRightMouseButton(e))
+                        golPanel.golData.drawFillMatrixCell(cellX, cellY, 0);
+                    else if (SwingUtilities.isLeftMouseButton(e))
+                        golPanel.golData.drawFillMatrixCell(cellX, cellY, 1);
+                }
+
             }
         });
     }

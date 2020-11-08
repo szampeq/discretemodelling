@@ -120,6 +120,11 @@ public class GoL {
                 matrix[x][y] = 0;
     }
 
+    public void drawFillMatrixCell(int x, int y, int value) {
+        if (x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length)
+                matrix[x][y] = value;
+    }
+
     public void cellNeighborhood() {
 
         int neighborsAlive;
