@@ -1,8 +1,9 @@
 package com.krzysztgac.discretemodelling.data;
 
+import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.krzysztgac.discretemodelling.tools.SimpleTools.numberToBinaryArray;
+
 
 public class GoL {
 
@@ -101,8 +102,8 @@ public class GoL {
 
     void randomMatrix() {
         zeroMatrix();
-        // number of random points (25-75% mesh)
-        int randomPoints = ThreadLocalRandom.current().nextInt(meshSize/4, meshSize/4 * 3);
+        // number of random points (~75% mesh)
+        int randomPoints = (meshSize/4 * 3) * (meshSize/4 * 3);
         // to simplify, points can cover each other
         for (int i = 0; i < randomPoints; i++) {
             int randomX = ThreadLocalRandom.current().nextInt(0, meshSize - 1);
@@ -118,4 +119,46 @@ public class GoL {
             else
                 matrix[x][y] = 0;
     }
+
+    public void cellNeighborhood() {
+
+        int neighborsAlive;
+        int[][] newCells = new int[meshSize][meshSize];
+
+        for (int i = 0; i < meshSize-1; i++)
+            for (int j = 0; j < meshSize-1; j++) {
+
+                neighborsAlive = 0;
+
+                for (int m = -1; m <= 1; m++)
+                    for (int n = -1; n <= 1; n++) {
+
+                        int x = i + m;
+                        int y = j + n;
+
+                        if (x < 0 || y < 0) continue;
+                        if (x == i && y == j) continue;
+                        if (x > meshSize - 1) continue;
+                        if (y > meshSize - 1) continue;
+
+                        neighborsAlive += matrix[x][y];
+
+                    }
+
+                // new cell is born
+                if (matrix[i][j] == 0 && neighborsAlive == 3)
+                    newCells[i][j] = 1;
+                // cell in crowd dies
+                else if (matrix[i][j] == 1 && neighborsAlive > 3)
+                    newCells[i][j] = 0;
+                // lonely cell dies
+                else if (matrix[i][j] == 1 && neighborsAlive < 2)
+                    newCells[i][j] = 0;
+                else
+                    newCells[i][j] = matrix[i][j];
+                }
+
+        matrix = newCells;
+    }
+
 }

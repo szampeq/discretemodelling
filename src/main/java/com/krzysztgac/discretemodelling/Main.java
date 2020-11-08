@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -280,7 +281,7 @@ public class Main extends JFrame {
         JLabel conditionsLabel = new JLabel("Initial States:");
         buttonPanel.add(conditionsLabel);
 
-        String[] initialStates = {"Unchanging", "Glider", "Oscilation", "Random", "Manual"};
+        String[] initialStates = {"Unchanging", "Glider", "Oscilation", "Random", "Empty"};
         JComboBox<String> selectState = new JComboBox<>(initialStates);
 
         buttonPanel.add(selectState);
@@ -305,6 +306,7 @@ public class Main extends JFrame {
         });
 
         AtomicBoolean isBoardCreated = new AtomicBoolean(false);
+
         Button board = new Button("Create board", buttonPanel);
         board.button.addActionListener(e -> {
             // MESH SIZE
@@ -328,6 +330,12 @@ public class Main extends JFrame {
         });
 
         Button startGame = new Button("Start game!", buttonPanel);
+        startGame.button.addActionListener(e -> {
+            if (isBoardCreated.get())
+                    golPanel.golData.cellNeighborhood();
+        });
+
+        Button stopGame = new Button("Stop game!", buttonPanel);
 
         mainPanel.add(golPanel);
 
