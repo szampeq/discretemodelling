@@ -14,7 +14,7 @@ public class GoL {
 
     public GoL(){
         this.cellSize = 10;
-    };
+    }
 
     public int getMeshSize() {
         return meshSize;
@@ -38,6 +38,14 @@ public class GoL {
 
     public void setInitialState(String initialState) {
         this.initialState = initialState;
+    }
+
+    public int[][] getMatrix(){
+        return matrix;
+    }
+
+    public void setMatrix(int[][] matrix){
+        this.matrix = matrix;
     }
 
     public void fillMatrix() {
@@ -153,8 +161,7 @@ public class GoL {
                             y -= meshSize;
 
                         neighborsAlive += matrix[x][y];
-                        if (i == 0 && j == 0)
-                            System.out.println(neighborsAlive);
+
                     }
 
                 // new cell is born

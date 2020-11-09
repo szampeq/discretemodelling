@@ -7,13 +7,17 @@
 package com.krzysztgac.discretemodelling;
 
 import com.krzysztgac.discretemodelling.data.*;
+import com.krzysztgac.discretemodelling.tools.GamePatternTXT;
 import com.krzysztgac.discretemodelling.tools.Utils;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Hashtable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -288,7 +292,6 @@ public class Main extends JFrame {
         JComboBox<String> selectState = new JComboBox<>(initialStates);
 
         buttonPanel.add(selectState);
-
         JLabel neighborhoodLabel = new JLabel("Select neighborhood:");
         buttonPanel.add(neighborhoodLabel);
 
@@ -332,6 +335,31 @@ public class Main extends JFrame {
             golPanel.repaint();
         });
 
+        // =========================================================
+
+        Button saveButton = new Button("Save pattern", buttonPanel);
+        saveButton.button.addActionListener(e -> {
+            if (isBoardCreated.get())
+                GamePatternTXT.savePattern(golPanel.golData);
+        });
+
+        Button openButton = new Button("Load pattern", buttonPanel);
+        JFileChooser pattern = new JFileChooser(new File("src/main/resources/patterns/"));
+
+        openButton.button.addActionListener(e -> {
+            int result = pattern.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = pattern.getSelectedFile();
+                String patternPath = selectedFile.getAbsolutePath();
+                try {
+                    golPanel.golData.setMatrix(GamePatternTXT.openPattern(patternPath));
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                }
+            }
+        });
+        // ==========================================================
+
         Button startGame = new Button("Start game!", buttonPanel);
         AtomicBoolean isGameStarted = new AtomicBoolean(false);
 
@@ -344,7 +372,7 @@ public class Main extends JFrame {
                 golPanel.golData.cellNeighborhood();
             }
 
-        }, 0, 300, TimeUnit.MILLISECONDS);
+        }, 0, 200, TimeUnit.MILLISECONDS);
 
         // ========================================================
 
@@ -357,6 +385,8 @@ public class Main extends JFrame {
         Button stopGame = new Button("Stop game!", buttonPanel);
 
         stopGame.button.addActionListener(e -> isGameStarted.set(false));
+
+        // =========================================================
 
         mainPanel.add(golPanel);
 
@@ -399,6 +429,7 @@ public class Main extends JFrame {
 
             }
         });
+
     }
 
 }
