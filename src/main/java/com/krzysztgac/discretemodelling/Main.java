@@ -24,6 +24,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.krzysztgac.discretemodelling.data.DataManager.programSettings;
 import static com.krzysztgac.discretemodelling.tools.SimpleTools.loadImage;
@@ -263,6 +264,8 @@ public class Main extends JFrame {
 
     public void gameOfLife(){
 
+        buttonPanel.setLayout(new GridLayout(17, 1));
+
         JLabel meshLabel = new JLabel("Select mesh size:");
         Integer[] meshValue = new Integer[100];
         for (int i = 1; i <= 100; i++){
@@ -303,13 +306,13 @@ public class Main extends JFrame {
         AtomicInteger selectedMesh = new AtomicInteger();
         AtomicInteger selectedCellSize = new AtomicInteger();
 
-        buttonPanel.setLayout(new GridLayout(14, 1));
-
-        Button clear = new Button("Clear surface", buttonPanel);
+        JLabel boardTools = new JLabel("Board Tools: ");
+        Button clear = new Button("Clear board", buttonPanel);
         clear.button.addActionListener(e -> {
             golPanel.golData.zeroMatrix();
             golPanel.repaint();
         });
+        buttonPanel.add(boardTools);
 
         AtomicBoolean isBoardCreated = new AtomicBoolean(false);
 
@@ -337,6 +340,9 @@ public class Main extends JFrame {
 
         // =========================================================
 
+        JLabel patterns = new JLabel("Save/Load Pattern: ");
+        buttonPanel.add(patterns);
+
         Button saveButton = new Button("Save pattern", buttonPanel);
         saveButton.button.addActionListener(e -> {
             if (isBoardCreated.get())
@@ -360,10 +366,12 @@ public class Main extends JFrame {
         });
         // ==========================================================
 
+        JLabel gameSetup = new JLabel("Run/Stop Game: ");
+        buttonPanel.add(gameSetup);
         Button startGame = new Button("Start game!", buttonPanel);
         AtomicBoolean isGameStarted = new AtomicBoolean(false);
 
-        // THREAD TO RUN GAME
+        // =============== THREAD TO RUN GAME ================
 
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(() -> {
@@ -372,7 +380,7 @@ public class Main extends JFrame {
                 golPanel.golData.cellNeighborhood();
             }
 
-        }, 0, 200, TimeUnit.MILLISECONDS);
+        }, 0, 100, TimeUnit.MILLISECONDS);
 
         // ========================================================
 
