@@ -292,7 +292,7 @@ public class Main extends JFrame {
         JLabel neighborhoodLabel = new JLabel("Select neighborhood:");
         buttonPanel.add(neighborhoodLabel);
 
-        String[] neighborhoods = {"Moore", "Neumann"};
+        String[] neighborhoods = {"Moore"};
         JComboBox<String> selectNeighborhood = new JComboBox<>(neighborhoods);
 
         buttonPanel.add(selectNeighborhood);
@@ -344,7 +344,7 @@ public class Main extends JFrame {
                 golPanel.golData.cellNeighborhood();
             }
 
-        }, 0, 200, TimeUnit.MILLISECONDS);
+        }, 0, 300, TimeUnit.MILLISECONDS);
 
         // ========================================================
 

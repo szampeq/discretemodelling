@@ -130,8 +130,8 @@ public class GoL {
         int neighborsAlive;
         int[][] newCells = new int[meshSize][meshSize];
 
-        for (int i = 0; i < meshSize-1; i++)
-            for (int j = 0; j < meshSize-1; j++) {
+        for (int i = 0; i < meshSize; i++)
+            for (int j = 0; j < meshSize; j++) {
 
                 neighborsAlive = 0;
 
@@ -141,13 +141,20 @@ public class GoL {
                         int x = i + m;
                         int y = j + n;
 
-                        if (x < 0 || y < 0) continue;
-                        if (x == i && y == j) continue;
-                        if (x > meshSize - 1) continue;
-                        if (y > meshSize - 1) continue;
+                        if (x == i && y == j)
+                            continue;
+                        if (x < 0)
+                            x += meshSize;
+                        if (y < 0)
+                            y += meshSize;
+                        if (x > meshSize - 1)
+                            x -= meshSize;
+                        if (y > meshSize - 1)
+                            y -= meshSize;
 
                         neighborsAlive += matrix[x][y];
-
+                        if (i == 0 && j == 0)
+                            System.out.println(neighborsAlive);
                     }
 
                 // new cell is born
