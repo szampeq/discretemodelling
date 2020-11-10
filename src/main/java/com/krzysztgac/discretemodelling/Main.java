@@ -70,8 +70,10 @@ public class Main extends JFrame {
             case "Game of Life":
                 gameOfLife();
                 break;
+            case "Forest Fire":
+                forestFire();
+                break;
             default:
-                imageProgram();
                 break;
         }
 
@@ -197,7 +199,7 @@ public class Main extends JFrame {
             meshValue[i] = i;
         }
         JComboBox<Integer> meshSize = new JComboBox<>(meshValue);
-        meshSize.setSelectedItem(meshValue[256]);
+        meshSize.setSelectedItem(meshValue[500]);
 
         buttonPanel.add(meshLabel);
         buttonPanel.add(meshSize);
@@ -440,4 +442,7 @@ public class Main extends JFrame {
 
     }
 
+    public void forestFire() {
+
+    }
 }

@@ -58,8 +58,8 @@ public class CA {
 
     public void generateCA() {
         int left, center, right = 0;
-        for (int j = 0; j < meshSize-1; j++)
-            for (int i = 0; i < meshSize-1; i++) {
+        for (int j = 0; j < meshSize - 1; j++)
+            for (int i = 0; i < meshSize; i++) {
                 if (boundaryPeriodic) {
                     // LEFT
                         left = i == 0 ? matrix[meshSize - 1][j] : matrix[i-1][j];
