@@ -8,6 +8,7 @@ package com.krzysztgac.discretemodelling;
 
 import com.krzysztgac.discretemodelling.data.*;
 import com.krzysztgac.discretemodelling.tools.GamePatternTXT;
+import com.krzysztgac.discretemodelling.tools.SaveImage;
 import com.krzysztgac.discretemodelling.tools.Utils;
 
 import javax.swing.*;
@@ -180,6 +181,11 @@ public class Main extends JFrame {
         reverse.button.addActionListener(e -> {
             utils.reverse();
             canvasPanel.repaint();
+        });
+
+        Button saveMap = new Button("Save Map", buttonPanel);
+        saveMap.button.addActionListener(e -> {
+            SaveImage.takeSnapShot(dm);
         });
 
         buttonPanel.setLayout(new GridLayout(18, 1));
