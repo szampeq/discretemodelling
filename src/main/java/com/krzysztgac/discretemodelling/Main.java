@@ -70,9 +70,6 @@ public class Main extends JFrame {
             case "Game of Life":
                 gameOfLife();
                 break;
-            case "Forest Fire":
-                forestFire();
-                break;
             default:
                 break;
         }
@@ -442,7 +439,4 @@ public class Main extends JFrame {
 
     }
 
-    public void forestFire() {
-
-    }
 }
